@@ -1,0 +1,29 @@
+.emotion-button {
+  background: url(../../../images/minesweeper-sprites.png) no-repeat;
+  background-size: 300px 181px;
+  width: 58px;
+  height: 58px;
+  margin: 5px auto;
+  border: none;
+  border-radius: 2px;
+}
+
+.smile {
+  background-position: 0 -50px;
+}
+
+.smile-pressed {
+  background-position: -58px -50px;
+}
+
+.wow {
+  background-position: -116px -50px;
+}
+
+.win {
+  background-position: -174px -50px;
+}
+
+.lose {
+  background-position: -233px -50px;
+}

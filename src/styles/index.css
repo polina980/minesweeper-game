@@ -1,0 +1,104 @@
+@import url(../components/buttons/cell-button/cell.css);
+@import url(../components/buttons/emotion-button/emotion.css);
+
+@font-face {
+  font-family: 'Digital';
+  src: url('../vendor/fonts/digital-dismay.woff2') format('woff2');
+}
+
+.page {
+  background: url(../images/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-width: 1920px;
+  min-width: 720px;
+  margin: 3% auto 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 594px;
+  height: 684px;
+  justify-content: center;
+  background: #bdbdbd;
+  border-left: 4px solid #ffffff;
+  border-top: 4px solid #ffffff;
+  border-right: 4px solid #7b7b7b;
+  border-bottom: 4px solid #7b7b7b;
+  border-radius: 2px;
+  margin: auto;
+}
+
+.header {
+  display: flex;
+  width: 560px;
+  height: 70px;
+  margin: 0 auto;
+  background: #bdbdbd;
+  border-left: 4px solid #7b7b7b;
+  border-top: 4px solid #7b7b7b;
+  border-right: 4px solid #ffffff;
+  border-bottom: 4px solid #ffffff;
+  border-radius: 2px;
+}
+
+.header-numbers {
+  display: flex;
+  font-family: 'Digital';
+  font-size: 65px;
+  width: 85px;
+  height: 50px;
+  margin: auto 14px;
+  background: black;
+  color: #ff0000;
+  justify-content: center;
+  align-items: center;
+}
+
+.emotion-button {
+  background: url(../images/minesweeper-sprites.png) no-repeat;
+  background-size: 322px 193px;
+  width: 60px;
+  height: 60px;
+  margin: 5px auto;
+  border: none;
+  border-radius: 2px;
+}
+
+.smile {
+  background-position: 0 -55px;
+}
+
+.smile-pressed {
+  background-position: -63px -55px;
+}
+
+.wow {
+  background-position: -125px -55px;
+}
+
+.cool {
+  background-position: -188px -55px;
+}
+
+.lose {
+  background-position: -250px -55px;
+}
+
+.line-between {
+  height: 13px;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(16, 35px);
+  width: 560px;
+  height: 560px;
+  margin: 0 auto;
+  border-left: 4px solid #7b7b7b;
+  border-top: 4px solid #7b7b7b;
+  border-right: 4px solid #ffffff;
+  border-bottom: 4px solid #ffffff;
+  border-radius: 2px;
+}
