@@ -57,12 +57,13 @@ function startGame() {
   }
 };
 
+// Функция начала новой игры
 function restartGame() {
   stopTimer();
   board = [];
   minesLocation.clear();
   cellsOpened = 0;
-  remainingMines = minesCount;
+  remainingMines = 40;
   gameOver = false;
   minesCounterElem.textContent = remainingMines;
   emotionButton.classList.remove(lose);
@@ -86,7 +87,6 @@ function restartGame() {
     }
     board.push(rowArr);
   }
-
   setRandomMines();
 }
 
@@ -110,7 +110,6 @@ const handleRightClick = (event) => {
     cell.classList.add(flagged);
     remainingMines -= 1;
   }
-
   minesCounterElem.textContent = remainingMines;
 }
 
@@ -218,11 +217,14 @@ function checkCell(row, column) {
 
 // Функция, которая проверяет, правильно ли помечены все ячейки с минами
 function checkFlags() {
-  let flaggedMines = 0;
-  for (let cellId of minesLocation) {
-    let cell = document.getElementById(cellId);
-    if (cell.classList.contains(flagged)) {
-      flaggedMines++;
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
+      const cell = board[row][column];
+      const isFlagged = cell.classList.contains(flagged);
+
+      if (isFlagged) {
+        flaggedMines++;
+      }
     }
   }
   return flaggedMines === minesCount;
@@ -240,10 +242,6 @@ const handleLeftClick = (event) => {
     || cell.classList.contains(opened)
     || cell.classList.contains(question)) {
     return;
-  }
-
-  if (cell.textContent === '?') {
-    cell.textContent = '';
   }
 
   if (cellsOpened === 0) {
@@ -268,11 +266,12 @@ const handleLeftClick = (event) => {
 
   checkMine(row, column);
 
-  if (cellsOpened === rows * columns - minesCount) {
+  if (cellsOpened == rows * columns - minesCount) {
     if (checkFlags()) {
       stopTimer();
       gameOver = true;
       emotionButton.classList.add(win);
+      return;
     }
   }
 };
