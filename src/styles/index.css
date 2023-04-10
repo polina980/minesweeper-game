@@ -56,36 +56,6 @@
   align-items: center;
 }
 
-.emotion-button {
-  background: url(../images/minesweeper-sprites.png) no-repeat;
-  background-size: 322px 193px;
-  width: 60px;
-  height: 60px;
-  margin: 5px auto;
-  border: none;
-  border-radius: 2px;
-}
-
-.smile {
-  background-position: 0 -55px;
-}
-
-.smile-pressed {
-  background-position: -63px -55px;
-}
-
-.wow {
-  background-position: -125px -55px;
-}
-
-.cool {
-  background-position: -188px -55px;
-}
-
-.lose {
-  background-position: -250px -55px;
-}
-
 .line-between {
   height: 13px;
 }

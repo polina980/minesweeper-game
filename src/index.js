@@ -3,49 +3,48 @@ import { CELL } from './components/buttons/cell-button/cell.js';
 import { EMOTION_CELL } from './components/buttons/emotion-button/emotion.js';
 import { startTimer, stopTimer } from './components/timer.js';
 
-const rows = 16;
-const columns = 16;
-const minesCount = 40;
+const BOARD_ROWS = 16;
+const BOARD_COLUMNS = 16;
+const MINES_COUNT = 40;
+
+const boardElem = document.getElementById('board');
+const minesCounterElem = document.getElementById('mines-counter');
+const emotionButton = document.getElementById('emotion-button');
+const timerElem = document.getElementById('timer');
 
 let board = [];
 let minesLocation = new Set();
 let cellsOpened = 0;
-let remainingMines = 40;
+let remainingMines = MINES_COUNT;
 let gameOver = false;
-let boardElem;
-let minesCounterElem;
-let emotionButton;
-let timerElem;
 
 const { cellButton, opened, flagged, question, mine, wrongMine, lastMine } = CELL;
 const { smile, smilePressed, wow, win, lose } = EMOTION_CELL;
 
-// Функция, которая создает игровое поле и настраивает игру
-function startGame() {
-  boardElem = document.getElementById('board');
-  minesCounterElem = document.getElementById('mines-counter');
-  emotionButton = document.getElementById('emotion-button');
-  timerElem = document.getElementById('timer');
-
+function setupGame() {
   minesCounterElem.textContent = remainingMines;
   emotionButton.classList.add(smile);
   timerElem.textContent = '000';
 
-  emotionButton.addEventListener('click', function () {
+  emotionButton.addEventListener('click', () => {
     emotionButton.classList.add(smilePressed);
-    restartGame();
-    setTimeout(function () {
-      emotionButton.classList.remove(smilePressed);
-    }, 100);
+    resetBoard();
+    startGame();
+    setTimeout(() => emotionButton.classList.remove(smilePressed), 100);
   });
+}
 
+function startGame() {
+  setupGame();
+  createBoard();
   setRandomMines();
+};
 
-  for (let row = 0; row < rows; row++) {
+function createBoard() {
+  for (let row = 0; row < BOARD_ROWS; row++) {
     const rowArr = [];
-    for (let column = 0; column < columns; column++) {
-      const cell = document.createElement('button');
-      cell.classList.add(cellButton);
+    for (let column = 0; column < BOARD_COLUMNS; column++) {
+      const cell = createCell();
       cell.id = `${row}-${column}`;
       cell.addEventListener('contextmenu', handleRightClick);
       cell.addEventListener('mousedown', handleMouseDown);
@@ -55,42 +54,28 @@ function startGame() {
     }
     board.push(rowArr);
   }
-};
+}
 
-// Функция начала новой игры
-function restartGame() {
-  stopTimer();
+function resetBoard() {
   board = [];
   minesLocation.clear();
   cellsOpened = 0;
-  remainingMines = 40;
+  remainingMines = MINES_COUNT;
   gameOver = false;
   minesCounterElem.textContent = remainingMines;
   emotionButton.classList.remove(lose);
   emotionButton.classList.remove(win);
   emotionButton.classList.add(smile);
   timerElem.textContent = '000';
-
   boardElem.innerHTML = '';
-
-  for (let row = 0; row < rows; row++) {
-    const rowArr = [];
-    for (let column = 0; column < columns; column++) {
-      const cell = document.createElement('button');
-      cell.classList.add(cellButton);
-      cell.id = `${row}-${column}`;
-      cell.addEventListener('contextmenu', handleRightClick);
-      cell.addEventListener('mousedown', handleMouseDown);
-      cell.addEventListener('mouseup', handleMouseUp);
-      boardElem.append(cell);
-      rowArr.push(cell);
-    }
-    board.push(rowArr);
-  }
-  setRandomMines();
 }
 
-// Функция, которая обрабатывает событие клика правой кнопкой мыши
+function createCell() {
+  const cell = document.createElement('button');
+  cell.classList.add(cellButton);
+  return cell;
+}
+
 const handleRightClick = (event) => {
   event.preventDefault();
   let cell = event.target;
@@ -113,14 +98,12 @@ const handleRightClick = (event) => {
   minesCounterElem.textContent = remainingMines;
 }
 
-// Функция, которая обрабатывает событие нажатия кнопки мыши
 const handleMouseDown = (event) => {
   if (event.button === 0) {
     emotionButton.classList.add(wow);
   }
 };
 
-// Функция, которая обрабатывает событие отпускания кнопки мыши
 const handleMouseUp = (event) => {
   if (event.button === 0) {
     emotionButton.classList.remove(wow);
@@ -128,12 +111,11 @@ const handleMouseUp = (event) => {
   }
 };
 
-// Функция, которая расставляет мины на поле
 function setRandomMines() {
-  let minesLeft = minesCount;
+  let minesLeft = MINES_COUNT;
   while (minesLeft > 0) {
-    let row = Math.floor(Math.random() * rows);
-    let column = Math.floor(Math.random() * columns);
+    let row = Math.floor(Math.random() * BOARD_ROWS);
+    let column = Math.floor(Math.random() * BOARD_COLUMNS);
     const cellId = `${row}-${column}`;
 
     if (!minesLocation.has(cellId)) {
@@ -143,10 +125,9 @@ function setRandomMines() {
   }
 };
 
-// Функция, которая открывает все ячейки с минами и останавливает таймер
 function showAllMines() {
-  for (let row = 0; row < rows; row++) {
-    for (let column = 0; column < columns; column++) {
+  for (let row = 0; row < BOARD_ROWS; row++) {
+    for (let column = 0; column < BOARD_COLUMNS; column++) {
       const cell = board[row][column];
       const isFlagged = cell.classList.contains(flagged);
       const hasMine = minesLocation.has(cell.id);
@@ -162,9 +143,8 @@ function showAllMines() {
   stopTimer();
 }
 
-// Функция, которая проверяет ячейку на наличие мины и открывает все ячейки, которые не содержат мины
-function checkMine(row, column) {
-  if (row < 0 || row >= rows || column < 0 || column >= columns) {
+function gameStatus(row, column) {
+  if (row < 0 || row >= BOARD_ROWS || column < 0 || column >= BOARD_COLUMNS) {
     return;
   };
 
@@ -176,61 +156,52 @@ function checkMine(row, column) {
   cell.classList.add(opened);
   cellsOpened += 1;
 
+  if (minesLocation.has(cell.id)) {
+    showAllMines();
+    stopTimer();
+    gameOver = true;
+    emotionButton.classList.remove(smile);
+    emotionButton.classList.add(lose);
+    return;
+  }
+
+  if (cellsOpened === BOARD_ROWS * BOARD_COLUMNS - MINES_COUNT) {
+    stopTimer();
+    gameOver = true;
+    emotionButton.classList.remove(smile);
+    emotionButton.classList.add(win);
+    return;
+  }
+
   let minesFound = 0;
   const startRow = Math.max(row - 1, 0);
-  const endRow = Math.min(row + 1, rows - 1);
+  const endRow = Math.min(row + 1, BOARD_ROWS - 1);
   const startColumn = Math.max(column - 1, 0);
-  const endColumn = Math.min(column + 1, columns - 1);
-
-  for (let i = startRow; i <= endRow; i++) {
-    for (let j = startColumn; j <= endColumn; j++) {
-      if (i == row && j == column) {
-        continue;
+  const endColumn = Math.min(column + 1, BOARD_COLUMNS - 1);
+  for (let r = startRow; r <= endRow; r++) {
+    for (let c = startColumn; c <= endColumn; c++) {
+      const cell = board[r][c];
+      if (minesLocation.has(cell.id)) {
+        minesFound += 1;
       }
-      minesFound += checkCell(i, j);
     }
   }
 
   if (minesFound > 0) {
-    cell.classList.remove(opened);
     cell.classList.add(`x${minesFound}`);
-  } else {
-    for (let i = startRow; i <= endRow; i++) {
-      for (let j = startColumn; j <= endColumn; j++) {
-        if (i == row && j == column) {
-          continue;
-        }
-        checkMine(i, j);
+    return;
+  }
+
+  for (let r = startRow; r <= endRow; r++) {
+    for (let c = startColumn; c <= endColumn; c++) {
+      if (r === row && c === column) {
+        continue;
       }
+      gameStatus(r, c);
     }
   }
-};
-
-// Функция, которая проверяет, содержит ли ячейка мину
-function checkCell(row, column) {
-  if (row < 0 || row >= rows || column < 0 || column >= columns) {
-    return 0;
-  } else {
-    return minesLocation.has(`${row}-${column}`) ? 1 : 0;
-  }
-};
-
-// Функция, которая проверяет, правильно ли помечены все ячейки с минами
-function checkFlags() {
-  for (let row = 0; row < rows; row++) {
-    for (let column = 0; column < columns; column++) {
-      const cell = board[row][column];
-      const isFlagged = cell.classList.contains(flagged);
-
-      if (isFlagged) {
-        flaggedMines++;
-      }
-    }
-  }
-  return flaggedMines === minesCount;
 }
 
-// Функция, которая отвечает за обработку клика на игровом поле (ячейке)
 const handleLeftClick = (event) => {
   let cell = event.target;
   let openFields = cell.id.split('-');
@@ -263,19 +234,7 @@ const handleLeftClick = (event) => {
     emotionButton.classList.add(lose);
     return;
   }
-
-  checkMine(row, column);
-
-  if (cellsOpened == rows * columns - minesCount) {
-    if (checkFlags()) {
-      stopTimer();
-      gameOver = true;
-      emotionButton.classList.add(win);
-      return;
-    }
-  }
+  gameStatus(row, column);
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  startGame();
-});
+startGame();
