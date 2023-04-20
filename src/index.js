@@ -23,8 +23,14 @@ const { smile, smilePressed, wow, win, lose } = EMOTION_CELL;
 
 function setupGame() {
   minesCounterElem.textContent = remainingMines;
+
   emotionButton.classList.add(smile);
-  timerElem.textContent = '000';
+
+  timerElem.innerHTML = `
+    <span class="digit zero"></span>
+    <span class="digit zero"></span>
+    <span class="digit zero"></span>
+  `;
 
   emotionButton.addEventListener('click', () => {
     emotionButton.classList.add(smilePressed);
@@ -66,7 +72,6 @@ function resetBoard() {
   emotionButton.classList.remove(lose);
   emotionButton.classList.remove(win);
   emotionButton.classList.add(smile);
-  timerElem.textContent = '000';
   boardElem.innerHTML = '';
 }
 
@@ -140,7 +145,6 @@ function showAllMines() {
       }
     }
   }
-  stopTimer();
 }
 
 function gameStatus(row, column) {
@@ -157,6 +161,7 @@ function gameStatus(row, column) {
   cellsOpened += 1;
 
   if (minesLocation.has(cell.id)) {
+    cell.classList.add(lastMine);
     showAllMines();
     stopTimer();
     gameOver = true;
@@ -224,15 +229,6 @@ const handleLeftClick = (event) => {
     while (minesLocation.has(cell.id)) {
       setRandomMines();
     }
-  }
-
-  if (minesLocation.has(cell.id)) {
-    cell.classList.add(lastMine);
-    showAllMines();
-    stopTimer();
-    gameOver = true;
-    emotionButton.classList.add(lose);
-    return;
   }
   gameStatus(row, column);
 };

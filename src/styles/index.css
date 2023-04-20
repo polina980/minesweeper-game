@@ -1,11 +1,6 @@
 @import url(../components/buttons/cell-button/cell.css);
 @import url(../components/buttons/emotion-button/emotion.css);
 
-@font-face {
-  font-family: 'Digital';
-  src: url('../vendor/fonts/digital-dismay.woff2') format('woff2');
-}
-
 .page {
   background: url(../images/background.jpg);
   background-repeat: no-repeat;
@@ -32,9 +27,10 @@
 
 .header {
   display: flex;
-  width: 560px;
+  width: 532px;
   height: 70px;
   margin: 0 auto;
+  padding: 0 14px;
   background: #bdbdbd;
   border-left: 4px solid #7b7b7b;
   border-top: 4px solid #7b7b7b;
@@ -43,17 +39,56 @@
   border-radius: 2px;
 }
 
-.header-numbers {
+#timer {
   display: flex;
-  font-family: 'Digital';
-  font-size: 65px;
-  width: 85px;
+}
+
+.digit {
+  background: url(../images/minesweeper-sprites.png) no-repeat;
+  background-size: 300px 183px;
+  width: 28px;
   height: 50px;
-  margin: auto 14px;
-  background: black;
-  color: #ff0000;
-  justify-content: center;
-  align-items: center;
+  margin: auto 0;
+}
+
+.one {
+  background-position: 0 0;
+}
+
+.two {
+  background-position: -30px 0;
+}
+
+.three {
+  background-position: -60px 0;
+}
+
+.four {
+  background-position: -91px 0;
+}
+
+.five {
+  background-position: -121px 0;
+}
+
+.six {
+  background-position: -151px 0;
+}
+
+.seven {
+  background-position: -181px 0;
+}
+
+.eight {
+  background-position: -211px 0;
+}
+
+.nine {
+  background-position: -242px 0;
+}
+
+.zero {
+  background-position: -272px 0;
 }
 
 .line-between {
