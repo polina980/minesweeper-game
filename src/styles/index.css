@@ -39,8 +39,12 @@
   border-radius: 2px;
 }
 
-#timer {
+.digits {
   display: flex;
+  width: 84px;
+  height: 50px;
+  margin: auto 0;
+  background-color: black;
 }
 
 .digit {
