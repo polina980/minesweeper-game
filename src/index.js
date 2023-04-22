@@ -21,8 +21,20 @@ let gameOver = false;
 const { cellButton, opened, flagged, question, mine, wrongMine, lastMine } = CELL;
 const { smile, smilePressed, wow, win, lose } = EMOTION_CELL;
 
+const digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+
+function startGame() {
+  setupGame();
+  createBoard();
+  setRandomMines();
+};
+
 function setupGame() {
-  minesCounterElem.textContent = remainingMines;
+  minesCounterElem.innerHTML = `
+  <span class="digit zero"></span>
+  <span class="digit four"></span>
+  <span class="digit zero"></span>
+`;
 
   emotionButton.classList.add(smile);
 
@@ -40,11 +52,18 @@ function setupGame() {
   });
 }
 
-function startGame() {
-  setupGame();
-  createBoard();
-  setRandomMines();
-};
+function updateMinesCounter() {
+  let sign = remainingMines < 0 ? 'minus' : '';
+  let value = Math.abs(remainingMines);
+  const hundreds = Math.floor(value / 100);
+  const tens = Math.floor((value % 100) / 10);
+  const ones = value % 10;
+
+  const digitElems = minesCounterElem.querySelectorAll('.digit');
+  digitElems[0].className = 'digit ' + (sign === 'minus' ? 'minus' : digits[hundreds]);
+  digitElems[1].className = 'digit ' + digits[tens];
+  digitElems[2].className = 'digit ' + digits[ones];
+}
 
 function createBoard() {
   for (let row = 0; row < BOARD_ROWS; row++) {
@@ -68,7 +87,6 @@ function resetBoard() {
   cellsOpened = 0;
   remainingMines = MINES_COUNT;
   gameOver = false;
-  minesCounterElem.textContent = remainingMines;
   emotionButton.classList.remove(lose);
   emotionButton.classList.remove(win);
   emotionButton.classList.add(smile);
@@ -100,7 +118,8 @@ const handleRightClick = (event) => {
     cell.classList.add(flagged);
     remainingMines -= 1;
   }
-  minesCounterElem.textContent = remainingMines;
+
+  updateMinesCounter();
 }
 
 const handleMouseDown = (event) => {
